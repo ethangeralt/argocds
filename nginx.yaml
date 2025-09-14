@@ -1,24 +1,26 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
-  creationTimestamp: null
-  labels:
-    app: nginx
-  name: nginx
+  name: demo-rollout
 spec:
-  replicas: 2
+  replicas: 3
+  strategy:
+    canary:
+      steps:
+        - setWeight: 25
+        - pause: { duration: 60 } # pause for analysis/manual judgment
+        - setWeight: 50
+        - pause: { duration: 60 }
   selector:
     matchLabels:
-      app: nginx
-  strategy: {}
+      app: demo
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        app: nginx
+        app: demo
     spec:
       containers:
-      - image: httpd
-        name: nginx
-        resources: {}
-status: {}
+        - name: demo
+          image: nginx:1.25
+          ports:
+            - containerPort: 80
