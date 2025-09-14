@@ -42,7 +42,7 @@ spec:
     blueGreen:
       activeService: my-app-active
       previewService: my-app-preview
-      autoPromotionEnabled: false   # requires manual promotion
+      autoPromotionEnabled: true   # requires manual promotion
   selector:
     matchLabels:
       app: my-app
